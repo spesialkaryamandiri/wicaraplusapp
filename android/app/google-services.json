@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "290085303417",
+    "project_id": "wicaraplusapp",
+    "storage_bucket": "wicaraplusapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290085303417:android:7bd74b00fce46516c090a8",
+        "android_client_info": {
+          "package_name": "com.spesialkaryamandiri.wicaraplusapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290085303417-96alnkbirip4nea8q8902345iggkfdgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoJ5U9pf03ajTC6ywjS5_6a0lCMhCb4LE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290085303417-96alnkbirip4nea8q8902345iggkfdgo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "290085303417-3ujfacu7jvjannl86vga5mf54ccu658e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wicaraplusmitra"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290085303417:android:15e221545ce54628c090a8",
+        "android_client_info": {
+          "package_name": "com.spesialkaryamandiri.wicaraplusmitra"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290085303417-96alnkbirip4nea8q8902345iggkfdgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoJ5U9pf03ajTC6ywjS5_6a0lCMhCb4LE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290085303417-96alnkbirip4nea8q8902345iggkfdgo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "290085303417-3ujfacu7jvjannl86vga5mf54ccu658e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wicaraplusmitra"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
