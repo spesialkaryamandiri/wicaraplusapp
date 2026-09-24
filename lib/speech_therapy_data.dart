@@ -249,6 +249,36 @@ final List<TherapyCategory> speechTherapyData = [
         videoPath: "assets/video/SukuKata_Co.mp4",
         isFree: false,
       ),
+      TherapyItem(
+        title: "Da",
+        imagePath: "assets/image/SukuKata_Da.jpg",
+        videoPath: "assets/video/SukuKata_Da.mp4",
+        isFree: false,
+      ),
+      TherapyItem(
+        title: "Di",
+        imagePath: "assets/image/SukuKata_Di.jpg",
+        videoPath: "assets/video/SukuKata_Di.mp4",
+        isFree: false,
+      ),
+      TherapyItem(
+        title: "Du",
+        imagePath: "assets/image/SukuKata_Du.png",
+        videoPath: "assets/video/SukuKata_Du.mp4",
+        isFree: false,
+      ),
+      TherapyItem(
+        title: "De",
+        imagePath: "assets/image/SukuKata_De.jpg",
+        videoPath: "assets/video/SukuKata_De.mp4",
+        isFree: false,
+      ),
+      TherapyItem(
+        title: "Do",
+        imagePath: "assets/image/SukuKata_Do.png",
+        videoPath: "assets/video/SukuKata_Do.mp4",
+        isFree: false,
+      ),
     ],
   ),
   TherapyCategory(

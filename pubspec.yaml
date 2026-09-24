@@ -115,6 +115,11 @@ flutter:
     - assets/image/SukuKata_Cu.png
     - assets/image/SukuKata_Ce.png
     - assets/image/SukuKata_Co.png
+    - assets/image/SukuKata_Da.jpg
+    - assets/image/SukuKata_Di.jpg
+    - assets/image/SukuKata_Du.png
+    - assets/image/SukuKata_De.jpg
+    - assets/image/SukuKata_Do.png
     - assets/video/SukuKata_Ba.mp4
     - assets/video/SukuKata_Bi.mp4
     - assets/video/SukuKata_Bu.mp4
@@ -125,6 +130,11 @@ flutter:
     - assets/video/SukuKata_Cu.mp4
     - assets/video/SukuKata_Ce.mp4
     - assets/video/SukuKata_Co.mp4
+    - assets/video/SukuKata_Da.mp4
+    - assets/video/SukuKata_Di.mp4
+    - assets/video/SukuKata_Du.mp4
+    - assets/video/SukuKata_De.mp4
+    - assets/video/SukuKata_Do.mp4
     - assets/image/Kons_B.png
     - assets/image/Kons_C.png
     - assets/image/Kons_D.jpg
