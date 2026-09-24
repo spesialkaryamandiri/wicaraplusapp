@@ -64,7 +64,7 @@ class AppVersionConfig {
       case AppFlavor.publicBeta:
         return 'v0.9.5';
       case AppFlavor.production:
-        return 'v1.2.4';
+        return 'v1.2.5';
     }
   }
 
