@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:video_player/video_player.dart';
@@ -37,7 +38,7 @@ class _SpeechTherapyPageState extends State<SpeechTherapyPage> {
       _autoUnlock = AppVersionConfig.hasAutoFullAccess();
     });
 
-    if (!_hasAccess && !_autoUnlock) {
+    if (!_hasAccess && !_autoUnlock && !kIsWeb) {
       _loadBannerAd();
     }
   }

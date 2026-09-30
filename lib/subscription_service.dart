@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wicaraplusapp/app_version_config.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -24,6 +25,8 @@ class SubscriptionService {
   // ─── Inisialisasi ─────────────────────────────────────────────────────────
 
   Future<void> initPlatformState() async {
+    if (kIsWeb) return;
+
     await Purchases.setLogLevel(LogLevel.debug);
 
     PurchasesConfiguration configuration = PurchasesConfiguration(_apiKey);
@@ -33,6 +36,8 @@ class SubscriptionService {
   // ─── Cek Status Langganan (Real IAP) ──────────────────────────────────────
 
   Future<bool> isPremium() async {
+    if (kIsWeb) return getPremiumLocal();
+
     try {
       CustomerInfo customerInfo = await Purchases.getCustomerInfo();
       bool isPremiumActive =

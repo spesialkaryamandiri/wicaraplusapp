@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wicaraplusapp/about.dart';
@@ -24,10 +25,12 @@ void main() async {
     debugPrint("Firebase initialization failed: $e");
   }
   
-  MobileAds.instance.initialize();
-  
-  // Inisialisasi RevenueCat
-  await SubscriptionService().initPlatformState();
+  if (!kIsWeb) {
+    MobileAds.instance.initialize();
+
+    // Inisialisasi RevenueCat
+    await SubscriptionService().initPlatformState();
+  }
   
   runApp(const MyApp());
 }
@@ -75,7 +78,7 @@ class _HomePageState extends State<HomePage> {
       _shouldShowAds = showAds;
     });
 
-    if (_shouldShowAds) {
+    if (_shouldShowAds && !kIsWeb) {
       _loadBannerAd();
     }
   }
