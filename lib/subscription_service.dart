@@ -19,7 +19,7 @@ class SubscriptionService {
   static const String entitlementId = 'Spesial Karya Mandiri Pro';
 
   // API Key sesuai permintaan
-  static const _apiKey = "test_shfeNUKFtJCjVryHMJMAKzqIgRq";
+  static const _apiKey = "goog_ObvaeolVxktpsuCmUJICwKOPxWs";
 
   // ─── Inisialisasi ─────────────────────────────────────────────────────────
 
@@ -35,12 +35,13 @@ class SubscriptionService {
   Future<bool> isPremium() async {
     try {
       CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-      bool isPremiumActive = customerInfo.entitlements.all[entitlementId]?.isActive ?? false;
-      
+      bool isPremiumActive =
+          customerInfo.entitlements.all[entitlementId]?.isActive ?? false;
+
       if (isPremiumActive) {
         await setPremiumLocal(true);
       }
-      
+
       return isPremiumActive;
     } catch (e) {
       return await getPremiumLocal();
@@ -137,5 +138,3 @@ class SubscriptionService {
     return !(await canAccessAllContent());
   }
 }
-
-
