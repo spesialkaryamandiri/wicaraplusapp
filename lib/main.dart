@@ -349,6 +349,18 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                       _buildToyButton(
+                        text: "E-Rapor Terapi",
+                        color: const Color(0xFF06D6A0),
+                        shadowColor: const Color(0xFF059669),
+                        icon: Icons.insights_rounded,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const ERaporPage()),
+                          );
+                        },
+                      ),
+                      _buildToyButton(
                         text: "Cari Ahli",
                         color: const Color(0xFF3A86FF), // Blue
                         shadowColor: const Color(0xFF2563EB),

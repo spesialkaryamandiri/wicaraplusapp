@@ -237,15 +237,8 @@ class _SpeechTherapyPageState extends State<SpeechTherapyPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundColor: category.color.withValues(alpha: 0.15),
-              child: Icon(
-                category.icon,
-                size: 36,
-                color: category.color,
-              ),
-            ),
+             Icon(Icons.record_voice_over, size: 50, color: Colors.blue), // Placeholder icon
+             // Image.asset(category.iconPath, height: 60), // Use actual asset if available
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
