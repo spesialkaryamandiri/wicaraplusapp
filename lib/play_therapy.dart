@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:wicaraplusapp/app_version_config.dart';
 import 'package:wicaraplusapp/subscription_service.dart';
 import 'package:wicaraplusapp/paywall_page.dart';
+import 'package:wicaraplusapp/therapy_progress_service.dart';
 
 class PlayTherapyPage extends StatefulWidget {
   const PlayTherapyPage({super.key});
@@ -272,6 +275,7 @@ class _PlayTherapyCategoryPageState extends State<PlayTherapyCategoryPage> {
 
   void _checkAnswer(TherapyGameOption selected) async {
     final correct = selected == _questions[_currentIndex].correctOption;
+    unawaited(_recordAttempt(correct));
     if (correct) {
       try {
         await _audioPlayer.play(AssetSource('audio/Hasil_Ya.mp3'));
@@ -286,6 +290,26 @@ class _PlayTherapyCategoryPageState extends State<PlayTherapyCategoryPage> {
         // ignore
       }
       _showFeedback(false);
+    }
+  }
+
+  Future<void> _recordAttempt(bool isCorrect) async {
+    try {
+      await TherapyProgressService().recordAttempt(
+        therapyType: 'Terapi Bermain',
+        category: widget.category.title,
+        activity: _questions[_currentIndex].questionText,
+        isCorrect: isCorrect,
+      );
+    } catch (error) {
+      debugPrint('Gagal menyimpan hasil terapi bermain: $error');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Hasil latihan belum dapat disimpan. Periksa akun dan koneksi internet.'),
+          ),
+        );
+      }
     }
   }
 

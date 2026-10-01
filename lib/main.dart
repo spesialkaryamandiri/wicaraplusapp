@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wicaraplusapp/about.dart';
 import 'package:wicaraplusapp/app_version_config.dart';
+import 'package:wicaraplusapp/e_rapor_page.dart';
 import 'package:wicaraplusapp/speech_therapy.dart';
 import 'package:wicaraplusapp/play_therapy.dart';
 import 'package:wicaraplusapp/splash_screen.dart';
@@ -220,6 +222,18 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                       _buildToyButton(
+                        text: "E-Rapor Terapi",
+                        color: const Color(0xFF06D6A0),
+                        shadowColor: const Color(0xFF059669),
+                        icon: Icons.insights_rounded,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const ERaporPage()),
+                          );
+                        },
+                      ),
+                      _buildToyButton(
                         text: "Cari Ahli",
                         color: const Color(0xFF3A86FF), // Blue
                         shadowColor: const Color(0xFF2563EB),
@@ -261,7 +275,9 @@ class _HomePageState extends State<HomePage> {
                         color: const Color(0xFFCED4DA), // Gray
                         shadowColor: const Color(0xFF868E96),
                         icon: Icons.logout_rounded,
-                        onPressed: () {
+                        onPressed: () async {
+                          await FirebaseAuth.instance.signOut();
+                          if (!context.mounted) return;
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (_) => const LoginPage()),
