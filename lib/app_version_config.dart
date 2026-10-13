@@ -10,7 +10,10 @@ library;
 /// - production  → Rilis Resmi        (aktif mulai 11 April 2026, semua fitur
 ///                                     premium gratis 7 hari sejak rilis)
 
-const String _kFlavor = String.fromEnvironment('APP_FLAVOR', defaultValue: 'production');
+const String _kFlavor = String.fromEnvironment(
+  'APP_FLAVOR',
+  defaultValue: 'production',
+);
 
 class AppVersionConfig {
   AppVersionConfig._();
@@ -64,7 +67,7 @@ class AppVersionConfig {
       case AppFlavor.publicBeta:
         return 'v0.9.5';
       case AppFlavor.production:
-        return 'v1.3.0';
+        return 'v1.3.1';
     }
   }
 
@@ -128,15 +131,22 @@ class AppVersionConfig {
 
   static String _formatDate(DateTime d) {
     const months = [
-      '', 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des',
+      '',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'Mei',
+      'Jun',
+      'Jul',
+      'Agt',
+      'Sep',
+      'Okt',
+      'Nov',
+      'Des',
     ];
     return '${d.day} ${months[d.month]} ${d.year}';
   }
 }
 
-enum AppFlavor {
-  closedBeta,
-  publicBeta,
-  production,
-}
+enum AppFlavor { closedBeta, publicBeta, production }

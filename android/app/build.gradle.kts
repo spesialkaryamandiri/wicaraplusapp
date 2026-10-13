@@ -14,8 +14,22 @@ plugins {
 val keystorePropertiesFile = rootProject.file("key.properties")
 val keystoreProperties = Properties()
 if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+    FileInputStream(keystorePropertiesFile).use(keystoreProperties::load)
 }
+
+val releaseKeyAlias = keystoreProperties.getProperty("keyAlias")?.takeIf(String::isNotBlank)
+val releaseKeyPassword =
+    keystoreProperties.getProperty("keyPassword")?.takeIf(String::isNotBlank)
+val releaseStorePassword =
+    keystoreProperties.getProperty("storePassword")?.takeIf(String::isNotBlank)
+val releaseStoreFilePath =
+    keystoreProperties.getProperty("storeFile")?.takeIf(String::isNotBlank)
+val releaseStoreFile = releaseStoreFilePath?.let { file(it) }
+val releaseSigningConfigured =
+    releaseKeyAlias != null &&
+        releaseKeyPassword != null &&
+        releaseStorePassword != null &&
+        releaseStoreFile?.isFile == true
 
 android {
     namespace = "com.spesialkaryamandiri.wicaraplusapp"
@@ -44,12 +58,11 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = keystoreProperties.getProperty("keyAlias")
-            keyPassword = keystoreProperties.getProperty("keyPassword")
-            storePassword = keystoreProperties.getProperty("storePassword")
-            val storeFilePath = keystoreProperties.getProperty("storeFile")
-            if (storeFilePath != null) {
-                storeFile = file(storeFilePath)
+            if (releaseSigningConfigured) {
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+                storePassword = releaseStorePassword
+                storeFile = releaseStoreFile
             }
         }
     }
@@ -63,4 +76,35 @@ android {
 
 flutter {
     source = "../.."
+}
+
+val validateReleaseSigning by tasks.registering {
+    doLast {
+        val missingProperties = buildList {
+            if (releaseKeyAlias == null) add("keyAlias")
+            if (releaseKeyPassword == null) add("keyPassword")
+            if (releaseStorePassword == null) add("storePassword")
+            if (releaseStoreFilePath == null) add("storeFile")
+        }
+
+        if (missingProperties.isNotEmpty()) {
+            throw GradleException(
+                "Release signing is incomplete. Check android/key.properties; " +
+                    "missing or blank values: ${missingProperties.joinToString()}."
+            )
+        }
+
+        if (releaseStoreFile?.isFile != true) {
+            throw GradleException(
+                "Release keystore not found. Check the storeFile path in " +
+                    "android/key.properties."
+            )
+        }
+    }
+}
+
+tasks.configureEach {
+    if (name == "assembleRelease" || name == "bundleRelease") {
+        dependsOn(validateReleaseSigning)
+    }
 }
