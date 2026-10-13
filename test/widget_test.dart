@@ -10,14 +10,42 @@ import 'package:wicaraplusapp/main.dart';
 import 'package:wicaraplusapp/splash_screen.dart';
 
 void main() {
-  testWidgets('MyApp renders SplashScreen smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('MyApp renders SplashScreen smoke test', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(MyApp(initializeServices: () async {}));
+    await tester.pump();
 
-    // Verify SplashScreen is present
     expect(find.byType(SplashScreen), findsOneWidget);
 
-    // Complete pending timer in SplashScreen
+    await tester.pump(const Duration(seconds: 3));
+  });
+
+  testWidgets('MyApp offers retry when required startup services fail', (
+    WidgetTester tester,
+  ) async {
+    var shouldFail = true;
+
+    await tester.pumpWidget(
+      MyApp(
+        initializeServices: () async {
+          if (shouldFail) {
+            throw StateError('Firebase is unavailable');
+          }
+        },
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Coba lagi'), findsOneWidget);
+
+    shouldFail = false;
+    await tester.tap(find.text('Coba lagi'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.byType(SplashScreen), findsOneWidget);
     await tester.pump(const Duration(seconds: 3));
   });
 }

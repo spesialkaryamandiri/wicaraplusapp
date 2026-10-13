@@ -14,6 +14,7 @@ class MapExpertPage extends StatefulWidget {
 class _MapExpertPageState extends State<MapExpertPage> {
   GoogleMapController? _mapController;
   Position? _currentPosition;
+  bool _hasLocationPermission = false;
   final Set<Marker> _markers = {};
 
   @override
@@ -25,7 +26,9 @@ class _MapExpertPageState extends State<MapExpertPage> {
 
   Future<void> _loadMarkers() async {
     try {
-      final snapshot = await FirebaseFirestore.instance.collection('partners').get();
+      final snapshot = await FirebaseFirestore.instance
+          .collection('partners')
+          .get();
       final List<Expert> experts = snapshot.docs.map((doc) {
         return Expert.fromMap(doc.data());
       }).toList();
@@ -44,7 +47,9 @@ class _MapExpertPageState extends State<MapExpertPage> {
                 title: expert.name,
                 snippet: '${expert.type} - ${expert.phone}',
               ),
-              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueCyan,
+              ),
             ),
           );
         }
@@ -63,7 +68,9 @@ class _MapExpertPageState extends State<MapExpertPage> {
                 title: expert.name,
                 snippet: '${expert.type} - ${expert.phone}',
               ),
-              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueCyan,
+              ),
             ),
           );
         }
@@ -72,40 +79,73 @@ class _MapExpertPageState extends State<MapExpertPage> {
   }
 
   Future<void> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        _showLocationMessage(
+          'Aktifkan layanan lokasi untuk melihat posisi Anda.',
+        );
         return;
       }
-    }
 
-    if (permission == LocationPermission.deniedForever) {
-      return;
-    }
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
 
-    final position = await Geolocator.getCurrentPosition();
-    if (!mounted) return;
-    setState(() {
-      _currentPosition = position;
-    });
+      if (permission == LocationPermission.denied) {
+        _showLocationMessage(
+          'Izin lokasi ditolak. Peta tetap dapat digunakan.',
+        );
+        return;
+      }
 
-    if (_mapController != null) {
-      _mapController!.animateCamera(
+      if (permission == LocationPermission.deniedForever) {
+        _showLocationMessage(
+          'Izin lokasi dinonaktifkan. Ubah izinnya melalui pengaturan perangkat.',
+        );
+        return;
+      }
+
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        _showLocationMessage(
+          'Izin lokasi belum tersedia. Peta tetap dapat digunakan.',
+        );
+        return;
+      }
+
+      if (!mounted) return;
+      setState(() {
+        _hasLocationPermission = true;
+      });
+
+      final position = await Geolocator.getCurrentPosition();
+      if (!mounted) return;
+      setState(() {
+        _currentPosition = position;
+      });
+
+      _mapController?.animateCamera(
         CameraUpdate.newLatLngZoom(
           LatLng(position.latitude, position.longitude),
           14,
         ),
       );
+    } catch (error, stackTrace) {
+      debugPrint('Failed to determine device location: $error');
+      debugPrintStack(stackTrace: stackTrace);
+      _showLocationMessage(
+        'Lokasi tidak dapat diperoleh. Peta tetap dapat digunakan.',
+      );
     }
+  }
+
+  void _showLocationMessage(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -131,17 +171,18 @@ class _MapExpertPageState extends State<MapExpertPage> {
             ),
             onMapCreated: (controller) {
               _mapController = controller;
-              if (_currentPosition != null) {
-                _mapController!.animateCamera(
+              final position = _currentPosition;
+              if (position != null) {
+                controller.animateCamera(
                   CameraUpdate.newLatLngZoom(
-                    LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+                    LatLng(position.latitude, position.longitude),
                     14,
                   ),
                 );
               }
             },
             markers: _markers,
-            myLocationEnabled: true,
+            myLocationEnabled: _hasLocationPermission,
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
           ),
@@ -150,7 +191,9 @@ class _MapExpertPageState extends State<MapExpertPage> {
             left: 16,
             right: 16,
             child: Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
               elevation: 8,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -159,7 +202,10 @@ class _MapExpertPageState extends State<MapExpertPage> {
                   children: [
                     const Text(
                       'Menampilkan Ahli Terdekat',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     const Text(

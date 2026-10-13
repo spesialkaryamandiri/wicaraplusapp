@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_core/firebase_core.dart';
@@ -16,29 +18,47 @@ import 'package:wicaraplusapp/ad_helper.dart';
 import 'package:wicaraplusapp/find_expert_page.dart';
 import 'firebase_options.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  
+Future<void> _initializeAppServices() async {
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-  } catch (e) {
-    debugPrint("Firebase initialization failed: $e");
+  } catch (error, stackTrace) {
+    debugPrint('Firebase initialization failed: $error');
+    debugPrintStack(stackTrace: stackTrace);
+    rethrow;
   }
-  
-  if (!kIsWeb) {
-    MobileAds.instance.initialize();
 
-    // Inisialisasi RevenueCat
-    await SubscriptionService().initPlatformState();
+  if (!kIsWeb) {
+    unawaited(_initializeOptionalServices());
   }
-  
+}
+
+Future<void> _initializeOptionalServices() async {
+  try {
+    await MobileAds.instance.initialize();
+  } catch (error, stackTrace) {
+    debugPrint('Google Mobile Ads initialization failed: $error');
+    debugPrintStack(stackTrace: stackTrace);
+  }
+
+  try {
+    await SubscriptionService().initPlatformState();
+  } catch (error, stackTrace) {
+    debugPrint('RevenueCat initialization failed: $error');
+    debugPrintStack(stackTrace: stackTrace);
+  }
+}
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, this.initializeServices});
+
+  final Future<void> Function()? initializeServices;
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +68,84 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const SplashScreen(),
+      home: _AppStartupGate(
+        initializeServices: initializeServices ?? _initializeAppServices,
+      ),
       debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class _AppStartupGate extends StatefulWidget {
+  const _AppStartupGate({required this.initializeServices});
+
+  final Future<void> Function() initializeServices;
+
+  @override
+  State<_AppStartupGate> createState() => _AppStartupGateState();
+}
+
+class _AppStartupGateState extends State<_AppStartupGate> {
+  late Future<void> _initialization;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialization = _initialize();
+  }
+
+  Future<void> _initialize() => widget.initializeServices();
+
+  void _retryInitialization() {
+    setState(() {
+      _initialization = _initialize();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<void>(
+      future: _initialization,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      size: 48,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Aplikasi belum dapat memulai layanan utama. '
+                      'Periksa koneksi internet, lalu coba lagi.',
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                      onPressed: _retryInitialization,
+                      child: const Text('Coba lagi'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        return const SplashScreen();
+      },
     );
   }
 }
@@ -74,14 +170,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _checkSubscriptionStatus() async {
-    final subscriptionService = SubscriptionService();
-    final showAds = await subscriptionService.shouldShowAds();
-    setState(() {
-      _shouldShowAds = showAds;
-    });
+    try {
+      final subscriptionService = SubscriptionService();
+      final showAds = await subscriptionService.shouldShowAds();
+      if (!mounted) return;
+      setState(() {
+        _shouldShowAds = showAds;
+      });
 
-    if (_shouldShowAds && !kIsWeb) {
-      _loadBannerAd();
+      if (showAds && !kIsWeb) {
+        _loadBannerAd();
+      }
+    } catch (error, stackTrace) {
+      debugPrint('Failed to check subscription status: $error');
+      debugPrintStack(stackTrace: stackTrace);
     }
   }
 
@@ -92,6 +194,10 @@ class _HomePageState extends State<HomePage> {
       size: AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
+          if (!mounted) {
+            ad.dispose();
+            return;
+          }
           setState(() {
             _isBannerAdReady = true;
           });
@@ -194,7 +300,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
-                        child: Image.asset("assets/image/Logo_WICARAplus_trans.png", width: 220),
+                        child: Image.asset(
+                          "assets/image/Logo_WICARAplus_trans.png",
+                          width: 220,
+                        ),
                       ),
                       const SizedBox(height: 30),
                       _buildToyButton(
@@ -205,7 +314,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const PlayTherapyPage()),
+                            MaterialPageRoute(
+                              builder: (_) => const PlayTherapyPage(),
+                            ),
                           );
                         },
                       ),
@@ -217,7 +328,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const SpeechTherapyPage()),
+                            MaterialPageRoute(
+                              builder: (_) => const SpeechTherapyPage(),
+                            ),
                           );
                         },
                       ),
@@ -229,7 +342,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const ERaporPage()),
+                            MaterialPageRoute(
+                              builder: (_) => const ERaporPage(),
+                            ),
                           );
                         },
                       ),
@@ -241,7 +356,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const FindExpertPage()),
+                            MaterialPageRoute(
+                              builder: (_) => const FindExpertPage(),
+                            ),
                           );
                         },
                       ),
@@ -253,7 +370,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const AboutPage()),
+                            MaterialPageRoute(
+                              builder: (_) => const AboutPage(),
+                            ),
                           );
                         },
                       ),
@@ -266,7 +385,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const PaywallPage()),
+                            MaterialPageRoute(
+                              builder: (_) => const PaywallPage(),
+                            ),
                           );
                         },
                       ),
@@ -280,7 +401,9 @@ class _HomePageState extends State<HomePage> {
                           if (!context.mounted) return;
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (_) => const LoginPage()),
+                            MaterialPageRoute(
+                              builder: (_) => const LoginPage(),
+                            ),
                           );
                         },
                       ),
