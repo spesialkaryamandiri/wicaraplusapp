@@ -36,11 +36,11 @@ class AppVersionConfig {
   static DateTime get releaseDate {
     switch (flavor) {
       case AppFlavor.closedBeta:
-        return DateTime(2026, 3, 12); // 12 Maret 2026
+        return DateTime(2026, 10, 20); 
       case AppFlavor.publicBeta:
         return DateTime(2026, 11, 3);
       case AppFlavor.production:
-        return DateTime(2026, 4, 11); // 11 April 2026
+        return DateTime(2026, 12, 3); 
     }
   }
 
@@ -67,7 +67,7 @@ class AppVersionConfig {
       case AppFlavor.publicBeta:
         return 'v1.3.2';
       case AppFlavor.production:
-        return 'v1.3.0';
+        return 'v1.3.1';
     }
   }
 
