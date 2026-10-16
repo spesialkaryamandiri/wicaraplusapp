@@ -6,6 +6,21 @@ The Play Store release is built as an Android App Bundle (AAB). Release builds
 must use the existing Play upload keystore; do not generate or substitute a new
 keystore for an update to the existing Play app.
 
+### Planned release versions
+
+| Phase | Flavor | App version | Start date |
+| --- | --- | --- | --- |
+| Alpha (Closed Beta) | `closedBeta` | `1.3.1` | October 20, 2026 |
+| Public Beta | `publicBeta` | `1.3.2` | November 3, 2026 |
+| Production | `production` | `1.3.3` | December 3, 2026 |
+
+The app's displayed phase and version are selected with `APP_FLAVOR`. The
+installable Android/iOS package version is controlled separately by
+`version` in `pubspec.yaml` (or Flutter's `--build-name` and `--build-number`
+options). Set those to the phase being uploaded and use a build number greater
+than the latest one accepted by the relevant store. The current repository
+metadata remains `1.3.1+14`; update it for each subsequent store upload.
+
 1. Keep `android/key.properties` and the upload keystore local. Both are ignored
    by Git. Use `android/key.properties.example` as the format reference.
 2. Confirm in Play Console that the next version code is greater than every
@@ -27,7 +42,7 @@ keystore for an update to the existing Play app.
 
 The artifact to upload is
 `build/app/outputs/bundle/release/app-release.aab`. This release uses version
-`1.3.1` and Android version code `14`; update `version` in `pubspec.yaml` for
+from `pubspec.yaml` and its build number; update `version` in `pubspec.yaml` for
 every subsequent Play upload. Release signing validation fails the build if
 the properties or keystore file are missing. It never falls back to the debug
 key. R8 code and resource shrinking are disabled for this stability release to

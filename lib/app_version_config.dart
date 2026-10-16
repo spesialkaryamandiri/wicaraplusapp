@@ -36,11 +36,11 @@ class AppVersionConfig {
   static DateTime get releaseDate {
     switch (flavor) {
       case AppFlavor.closedBeta:
-        return DateTime(2026, 10, 20); 
+        return DateTime(2026, 10, 20);
       case AppFlavor.publicBeta:
         return DateTime(2026, 11, 3);
       case AppFlavor.production:
-        return DateTime(2026, 12, 3); 
+        return DateTime(2026, 12, 3);
     }
   }
 
@@ -63,19 +63,19 @@ class AppVersionConfig {
   static String get versionCode {
     switch (flavor) {
       case AppFlavor.closedBeta:
-        return 'v0.9.0';
-      case AppFlavor.publicBeta:
-        return 'v0.9.5';
-      case AppFlavor.production:
         return 'v1.3.1';
+      case AppFlavor.publicBeta:
+        return 'v1.3.2';
+      case AppFlavor.production:
+        return 'v1.3.3';
     }
   }
 
   // ─── Logika Akses ─────────────────────────────────────────────────────────
 
   /// Apakah fase rilis saat ini sudah aktif (tanggal sekarang ≥ releaseDate)?
-  static bool isReleaseActive() {
-    return true; // Bypass countdown
+  static bool isReleaseActive([DateTime? now]) {
+    return !(now ?? DateTime.now()).isBefore(releaseDate);
   }
 
   /// Untuk ujicoba tertutup & publik: semua fitur terbuka selama fase aktif.
@@ -85,7 +85,7 @@ class AppVersionConfig {
   }
 
   /// Untuk production: cek apakah masih dalam periode 7 hari gratis premium
-  /// sejak tanggal rilis (11 April – 17 April 2026).
+  /// sejak tanggal rilis (3–9 Desember 2026).
   static bool isProductionFreePeriodActive() {
     if (flavor != AppFlavor.production) return false;
     if (!isReleaseActive()) return false;
