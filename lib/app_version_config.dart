@@ -5,9 +5,9 @@ library;
 /// Digunakan untuk mengontrol perilaku aplikasi berdasarkan flavor build.
 /// Setiap flavor dikompilasi menggunakan `--dart-define=APP_FLAVOR=nilai`.
 ///
-/// - closedBeta  → Ujicoba Tertutup   (aktif mulai 12 Maret 2026)
-/// - publicBeta  → Ujicoba Publik     (aktif mulai 30 Maret 2026)
-/// - production  → Rilis Resmi        (aktif mulai 11 April 2026, semua fitur
+/// - closedBeta  → Ujicoba Tertutup   (aktif mulai 20 Oktober 2026)
+/// - publicBeta  → Ujicoba Publik     (aktif mulai 3 November 2026)
+/// - production  → Rilis Resmi        (aktif mulai 3 Desember 2026, semua fitur
 ///                                     premium gratis 7 hari sejak rilis)
 
 const String _kFlavor = String.fromEnvironment(
