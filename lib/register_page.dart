@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:wicaraplusapp/app_version_config.dart';
 import 'package:wicaraplusapp/main.dart'; // To navigate to HomePage
 import 'package:wicaraplusapp/subscription_service.dart';
 
@@ -46,9 +47,9 @@ class _RegisterPageState extends State<RegisterPage> {
         return;
       }
       if (_emailController.text.trim().isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Email harus diisi.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Email harus diisi.')));
         return;
       }
       if (_passwordController.text.trim().isEmpty) {
@@ -62,7 +63,9 @@ class _RegisterPageState extends State<RegisterPage> {
     int? answer = int.tryParse(_mathController.text);
     if (answer == null || answer != (_num1 * _num2)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Jawaban matematika salah. Silakan coba lagi.')),
+        const SnackBar(
+          content: Text('Jawaban matematika salah. Silakan coba lagi.'),
+        ),
       );
       _generateMathChallenge();
       return;
@@ -77,15 +80,20 @@ class _RegisterPageState extends State<RegisterPage> {
         await Future.delayed(const Duration(seconds: 1));
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Fitur pendaftaran pihak ketiga hanya simulasi. Gunakan pendaftaran email.')),
+          const SnackBar(
+            content: Text(
+              'Fitur pendaftaran pihak ketiga hanya simulasi. Gunakan pendaftaran email.',
+            ),
+          ),
         );
         setState(() => _isLoading = false);
         return;
       } else {
-        userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
+        userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            );
       }
 
       final user = userCredential.user;
@@ -100,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       }
 
-      // Mulai uji coba gratis seminggu sejak register
+      // Jika mendaftar sebelum peluncuran, trial dimulai pada tanggal aktif.
       await SubscriptionService().startTrial();
 
       if (!mounted) return;
@@ -148,12 +156,18 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 16.0,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Image.asset("assets/image/Logo_WICARAplus_trans.png", height: 80),
+                Image.asset(
+                  "assets/image/Logo_WICARAplus_trans.png",
+                  height: 80,
+                ),
                 const SizedBox(height: 32),
                 const Text(
                   'Mulai Perjalanan Anda',
@@ -165,9 +179,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Buat akun untuk mengakses semua fitur terapi wicara.',
-                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                Text(
+                  AppVersionConfig.isReleaseActive()
+                      ? 'Buat akun untuk mengakses fitur terapi wicara.'
+                      : 'Daftar lebih awal untuk mencoba fitur gratis. '
+                            'Akses premium tersedia setelah fase ini dimulai.',
+                  style: const TextStyle(fontSize: 16, color: Colors.black54),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
@@ -202,7 +219,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                       ),
                       onPressed: () {
                         setState(() {
@@ -243,11 +262,17 @@ class _RegisterPageState extends State<RegisterPage> {
                       ? const SizedBox(
                           height: 24,
                           width: 24,
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 3,
+                          ),
                         )
                       : const Text(
                           'Daftar',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                 ),
                 const SizedBox(height: 24),
@@ -279,7 +304,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 12),
                 _buildSocialButton(
-                  iconWidget: const Icon(Icons.apple, color: Colors.black, size: 28),
+                  iconWidget: const Icon(
+                    Icons.apple,
+                    color: Colors.black,
+                    size: 28,
+                  ),
                   label: 'Lanjutkan dengan Apple',
                   onTap: () => _register(isSocial: true),
                 ),
@@ -328,9 +357,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 14),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         side: BorderSide(color: Colors.grey[300]!),
         backgroundColor: Colors.white,
       ),

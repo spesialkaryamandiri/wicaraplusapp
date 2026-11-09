@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wicaraplusapp/app_version_config.dart';
 import 'package:wicaraplusapp/login_page.dart';
+import 'package:wicaraplusapp/register_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -64,59 +65,107 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: FadeTransition(
-        opacity: _fadeAnim,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // ── Logo ──────────────────────────────────────────────────────
-              Image.asset(
-                'assets/image/LogoWICARAplus.jpg',
-                width: 200,
-                errorBuilder: (context, error, _) =>
-                    const Icon(Icons.flash_on, size: 100, color: Colors.blue),
-              ),
-              const SizedBox(height: 16),
-
-              // ── Badge Flavor ──────────────────────────────────────────────
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                decoration: BoxDecoration(
-                  color: _flavorColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  '${AppVersionConfig.flavorLabel}  •  ${AppVersionConfig.versionCode}',
-                  style: TextStyle(
-                    color: _flavorTextColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: FadeTransition(
+                opacity: _fadeAnim,
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/image/LogoWICARAplus.jpg',
+                        width: 200,
+                        errorBuilder: (context, error, _) => const Icon(
+                          Icons.flash_on,
+                          size: 100,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _flavorColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          '${AppVersionConfig.flavorLabel}  •  ${AppVersionConfig.versionCode}',
+                          style: TextStyle(
+                            color: _flavorTextColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      if (!_isActive) ...[
+                        _buildComingSoonCard(),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const Text(
+                                'Buat akun atau masuk untuk mencoba fitur '
+                                'gratis lebih awal. Fitur premium tersedia '
+                                'setelah fase ini dimulai.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              FilledButton(
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const RegisterPage(),
+                                  ),
+                                ),
+                                child: const Text('Daftar Akses Uji Coba'),
+                              ),
+                              OutlinedButton(
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const LoginPage(),
+                                  ),
+                                ),
+                                child: const Text('Masuk'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ] else ...[
+                        if (AppVersionConfig.accessStatusMessage().isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            child: Text(
+                              AppVersionConfig.accessStatusMessage(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                        const SizedBox(height: 20),
+                        const CircularProgressIndicator(),
+                      ],
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 28),
-
-              // ── Status / Countdown ────────────────────────────────────────
-              if (!_isActive) ...[
-                _buildComingSoonCard(),
-              ] else ...[
-                // Pesan singkat saat sudah aktif
-                if (AppVersionConfig.accessStatusMessage().isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: Text(
-                      AppVersionConfig.accessStatusMessage(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 14, color: Colors.black54),
-                    ),
-                  ),
-                const SizedBox(height: 20),
-                const CircularProgressIndicator(),
-              ],
-            ],
+            ),
           ),
         ),
       ),

@@ -108,6 +108,8 @@ class SubscriptionService {
   }
 
   Future<bool> isTrialActive() async {
+    if (!AppVersionConfig.isReleaseActive()) return false;
+
     final prefs = await SharedPreferences.getInstance();
     final trialStartStr = prefs.getString(_kTrialStartDate);
     if (trialStartStr == null) return false;
@@ -115,19 +117,28 @@ class SubscriptionService {
     final trialStart = DateTime.parse(trialStartStr);
     final now = DateTime.now();
     final difference = now.difference(trialStart).inDays;
-    return difference < _kTrialDays;
+    return difference >= 0 && difference < _kTrialDays;
   }
 
   Future<void> startTrial() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey(_kTrialStartDate)) {
-      await prefs.setString(_kTrialStartDate, DateTime.now().toIso8601String());
+      final now = DateTime.now();
+      final trialStart =
+          now.isBefore(AppVersionConfig.releaseDate)
+              ? AppVersionConfig.releaseDate
+              : now;
+      await prefs.setString(
+        _kTrialStartDate,
+        trialStart.toIso8601String(),
+      );
     }
   }
 
   // ─── Cek Akses Konten (Utama) ─────────────────────────────────────────────
 
   Future<bool> canAccessAllContent() async {
+    if (!AppVersionConfig.isReleaseActive()) return false;
     if (AppVersionConfig.hasAutoFullAccess()) return true;
     if (await isPremium()) return true;
     if (await isTrialActive()) return true;
