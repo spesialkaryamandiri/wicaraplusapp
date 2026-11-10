@@ -59,7 +59,8 @@ final List<TherapyCategory> speechTherapyData = [
         imagePath: "assets/image/Vokal_E.png",
         videoPath: "assets/video/Vokal_E.mp4",
         isFree: false,
-      ),TherapyItem(
+      ),
+      TherapyItem(
         title: "O",
         imagePath: "assets/image/Vokal_O.png",
         videoPath: "assets/video/Vokal_O.mp4",
