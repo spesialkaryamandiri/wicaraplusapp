@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class TherapyItem {
   final String title;
   final String imagePath;
@@ -14,15 +16,25 @@ class TherapyItem {
 
 class TherapyCategory {
   final String name;
+  final IconData icon;
+  final Color color;
   final String iconPath; // Or IconData
   final List<TherapyItem> items;
 
-  TherapyCategory({required this.name, required this.items, this.iconPath = 'assets/image/Logo_WICARAplus_trans.png'});
+  TherapyCategory({
+    required this.name,
+    required this.items,
+    this.icon = Icons.record_voice_over,
+    this.color = Colors.blue,
+    this.iconPath = 'assets/image/Logo_WICARAplus_trans.png',
+  });
 }
 
 final List<TherapyCategory> speechTherapyData = [
   TherapyCategory(
     name: "Huruf Vokal",
+    icon: Icons.record_voice_over,
+    color: Colors.blue,
     items: [
       TherapyItem(
         title: "A",
@@ -36,7 +48,7 @@ final List<TherapyCategory> speechTherapyData = [
         videoPath: "assets/video/Vokal_I.mp4",
         isFree: true,
       ),
-       TherapyItem(
+      TherapyItem(
         title: "U",
         imagePath: "assets/image/Vokal_U.jpg",
         videoPath: "assets/video/Vokal_U.mp4",
@@ -47,7 +59,8 @@ final List<TherapyCategory> speechTherapyData = [
         imagePath: "assets/image/Vokal_E.png",
         videoPath: "assets/video/Vokal_E.mp4",
         isFree: true,
-      ),TherapyItem(
+      ),
+      TherapyItem(
         title: "O",
         imagePath: "assets/image/Vokal_O.png",
         videoPath: "assets/video/Vokal_O.mp4",
@@ -57,32 +70,34 @@ final List<TherapyCategory> speechTherapyData = [
   ),
   TherapyCategory(
     name: "Huruf Konsonan",
+    icon: Icons.sort_by_alpha,
+    color: Colors.deepPurple,
     items: [
-       TherapyItem(
+      TherapyItem(
         title: "B",
         imagePath: "assets/image/Kons_B.png",
         videoPath: "assets/video/Kons_B.mp4",
         isFree: true,
       ),
-       TherapyItem(
+      TherapyItem(
         title: "C",
         imagePath: "assets/image/Kons_C.png",
         videoPath: "assets/video/Kons_C.mp4",
         isFree: true,
       ),
-        TherapyItem(
+      TherapyItem(
         title: "D",
         imagePath: "assets/image/Kons_D.jpg",
         videoPath: "assets/video/Kons_D.mp4",
         isFree: false,
       ),
-        TherapyItem(
+      TherapyItem(
         title: "F",
         imagePath: "assets/image/Kons_F.png",
         videoPath: "assets/video/Kons_F.mp4",
         isFree: false,
       ),
-        TherapyItem(
+      TherapyItem(
         title: "G",
         imagePath: "assets/image/Kons_G.png",
         videoPath: "assets/video/Kons_G.mp4",
@@ -188,6 +203,8 @@ final List<TherapyCategory> speechTherapyData = [
   ),
   TherapyCategory(
     name: "Suku Kata",
+    icon: Icons.segment,
+    color: Colors.teal,
     items: [
       TherapyItem(
         title: "Ba",
@@ -283,6 +300,8 @@ final List<TherapyCategory> speechTherapyData = [
   ),
   TherapyCategory(
     name: "Kata Dasar",
+    icon: Icons.menu_book,
+    color: Colors.orange,
     items: [
       TherapyItem(
         title: "Mama",
@@ -290,10 +309,124 @@ final List<TherapyCategory> speechTherapyData = [
         videoPath: "assets/video/Kata_Mama.mp4",
         isFree: true,
       ),
-       TherapyItem(
+      TherapyItem(
         title: "Papa",
         imagePath: "assets/image/Kata_Papa.jpg",
-          videoPath: "assets/video/Kata_Papa.mp4",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+    ],
+  ),
+  TherapyCategory(
+    name: "Kata Benda",
+    icon: Icons.category,
+    color: Colors.indigo,
+    items: [
+      TherapyItem(
+        title: "Mama",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Papa",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+    ],
+  ),
+  TherapyCategory(
+    name: "Kata Kerja",
+    icon: Icons.directions_run,
+    color: Colors.green,
+    items: [
+      TherapyItem(
+        title: "Mama",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Papa",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+    ],
+  ),
+  TherapyCategory(
+    name: "Kata Sifat",
+    icon: Icons.sentiment_satisfied_alt,
+    color: Colors.amber,
+    items: [
+      TherapyItem(
+        title: "Mama",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Papa",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+    ],
+  ),
+  TherapyCategory(
+    name: "Kata Ganti",
+    icon: Icons.people_alt,
+    color: Colors.cyan,
+    items: [
+      TherapyItem(
+        title: "Mama",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Papa",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+    ],
+  ),
+  TherapyCategory(
+    name: "Kata Keterangan",
+    icon: Icons.info_outline,
+    color: Colors.pink,
+    items: [
+      TherapyItem(
+        title: "Mama",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Papa",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+    ],
+  ),
+  TherapyCategory(
+    name: "Bilangan",
+    icon: Icons.format_list_numbered,
+    color: Colors.deepOrange,
+    items: [
+      TherapyItem(
+        title: "Mama",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Papa",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
         isFree: true,
       ),
     ],

@@ -237,17 +237,25 @@ class _SpeechTherapyPageState extends State<SpeechTherapyPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.record_voice_over,
-              size: 50,
-              color: Colors.blue,
-            ), // Placeholder icon
-            // Image.asset(category.iconPath, height: 60), // Use actual asset if available
+            CircleAvatar(
+              radius: 30,
+              backgroundColor: category.color.withValues(alpha: 0.15),
+              child: Icon(
+                category.icon,
+                size: 36,
+                color: category.color,
+              ),
+            ),
             const SizedBox(height: 10),
-            Text(
-              category.name,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                category.name,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),
