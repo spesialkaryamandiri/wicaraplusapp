@@ -323,13 +323,31 @@ final List<TherapyCategory> speechTherapyData = [
     color: Colors.indigo,
     items: [
       TherapyItem(
-        title: "Mama",
+        title: "Meja",
         imagePath: "assets/image/Kata_Mama.jpg",
         videoPath: "assets/video/Kata_Mama.mp4",
         isFree: true,
       ),
       TherapyItem(
-        title: "Papa",
+        title: "Kursi",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Buku",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Rumah",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Sepatu",
         imagePath: "assets/image/Kata_Papa.jpg",
         videoPath: "assets/video/Kata_Papa.mp4",
         isFree: true,
@@ -342,13 +360,43 @@ final List<TherapyCategory> speechTherapyData = [
     color: Colors.green,
     items: [
       TherapyItem(
-        title: "Mama",
+        title: "Makan",
         imagePath: "assets/image/Kata_Mama.jpg",
         videoPath: "assets/video/Kata_Mama.mp4",
         isFree: true,
       ),
       TherapyItem(
-        title: "Papa",
+        title: "Minum",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Duduk",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Bangun",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Berdiri",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Jalan",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Mandi",
         imagePath: "assets/image/Kata_Papa.jpg",
         videoPath: "assets/video/Kata_Papa.mp4",
         isFree: true,
@@ -361,13 +409,49 @@ final List<TherapyCategory> speechTherapyData = [
     color: Colors.amber,
     items: [
       TherapyItem(
-        title: "Mama",
+        title: "Senang",
         imagePath: "assets/image/Kata_Mama.jpg",
         videoPath: "assets/video/Kata_Mama.mp4",
         isFree: true,
       ),
       TherapyItem(
-        title: "Papa",
+        title: "Sedih",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Rajin",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Pintar",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Besar",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Kecil",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Tinggi",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Pendek",
         imagePath: "assets/image/Kata_Papa.jpg",
         videoPath: "assets/video/Kata_Papa.mp4",
         isFree: true,
@@ -399,13 +483,13 @@ final List<TherapyCategory> speechTherapyData = [
     color: Colors.pink,
     items: [
       TherapyItem(
-        title: "Mama",
+        title: "Supaya",
         imagePath: "assets/image/Kata_Mama.jpg",
         videoPath: "assets/video/Kata_Mama.mp4",
         isFree: true,
       ),
       TherapyItem(
-        title: "Papa",
+        title: "Lebih",
         imagePath: "assets/image/Kata_Papa.jpg",
         videoPath: "assets/video/Kata_Papa.mp4",
         isFree: true,
@@ -418,13 +502,61 @@ final List<TherapyCategory> speechTherapyData = [
     color: Colors.deepOrange,
     items: [
       TherapyItem(
-        title: "Mama",
+        title: "Satu",
         imagePath: "assets/image/Kata_Mama.jpg",
         videoPath: "assets/video/Kata_Mama.mp4",
         isFree: true,
       ),
       TherapyItem(
-        title: "Papa",
+        title: "Dua",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Tiga",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Empat",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Lima",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Enam",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Tujuh",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Delapan",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Sembilan",
+        imagePath: "assets/image/Kata_Mama.jpg",
+        videoPath: "assets/video/Kata_Mama.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Sepuluh",
         imagePath: "assets/image/Kata_Papa.jpg",
         videoPath: "assets/video/Kata_Papa.mp4",
         isFree: true,
