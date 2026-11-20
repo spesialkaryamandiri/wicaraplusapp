@@ -651,7 +651,7 @@ class _PlayTherapyPageState extends State<PlayTherapyPage> {
                 );
               }
             },
-            child: const Text("Langganan Rp99.000/bln"),
+            child: const Text("Langganan Sekarang"),
           ),
         ],
       ),
