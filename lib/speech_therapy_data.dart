@@ -464,13 +464,37 @@ final List<TherapyCategory> speechTherapyData = [
     color: Colors.cyan,
     items: [
       TherapyItem(
-        title: "Mama",
+        title: "Saya",
         imagePath: "assets/image/Kata_Mama.jpg",
         videoPath: "assets/video/Kata_Mama.mp4",
         isFree: true,
       ),
       TherapyItem(
-        title: "Papa",
+        title: "Anda",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Dia",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Kami",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Kalian",
+        imagePath: "assets/image/Kata_Papa.jpg",
+        videoPath: "assets/video/Kata_Papa.mp4",
+        isFree: true,
+      ),
+      TherapyItem(
+        title: "Mereka",
         imagePath: "assets/image/Kata_Papa.jpg",
         videoPath: "assets/video/Kata_Papa.mp4",
         isFree: true,

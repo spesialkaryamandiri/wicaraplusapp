@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'map_expert_page.dart';
 import 'expert_data.dart';
 
@@ -600,6 +601,18 @@ class _NearbyExpertsBottomSheetState extends State<NearbyExpertsBottomSheet> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
+                                  IconButton.outlined(
+                                    tooltip: "Buka Lokasi di Google Maps",
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: widget.categoryColor,
+                                      side: BorderSide(color: widget.categoryColor),
+                                    ),
+                                    onPressed: () {
+                                      _openGoogleMaps(expert);
+                                    },
+                                    icon: const Icon(Icons.directions, size: 20),
+                                  ),
+                                  const SizedBox(width: 8),
                                   OutlinedButton.icon(
                                     onPressed: () {
                                       _showContactOptions(context, expert);
@@ -658,6 +671,68 @@ class _NearbyExpertsBottomSheetState extends State<NearbyExpertsBottomSheet> {
     );
   }
 
+  String _cleanPhoneNumber(String phone) {
+    String cleaned = phone.replaceAll(RegExp(r'[^0-9]'), '');
+    if (cleaned.startsWith('0')) {
+      cleaned = '62${cleaned.substring(1)}';
+    }
+    return cleaned;
+  }
+
+  Future<void> _openGoogleMaps(Expert expert) async {
+    final Uri mapUri = Uri.parse(
+      'https://www.google.com/maps/dir/?api=1&destination=${expert.lat},${expert.lng}',
+    );
+    try {
+      if (await canLaunchUrl(mapUri)) {
+        await launchUrl(mapUri, mode: LaunchMode.externalApplication);
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tidak dapat membuka Google Maps')),
+        );
+      }
+    } catch (e) {
+      debugPrint("Error opening Google Maps: $e");
+    }
+  }
+
+  Future<void> _openWhatsApp(Expert expert) async {
+    final cleaned = _cleanPhoneNumber(expert.phone);
+    final text = Uri.encodeComponent(
+      'Halo ${expert.name}, saya ingin konsultasi terapi melalui aplikasi WICARA+.',
+    );
+    final Uri waUri = Uri.parse('https://wa.me/$cleaned?text=$text');
+    try {
+      if (await canLaunchUrl(waUri)) {
+        await launchUrl(waUri, mode: LaunchMode.externalApplication);
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tidak dapat membuka WhatsApp')),
+        );
+      }
+    } catch (e) {
+      debugPrint("Error opening WhatsApp: $e");
+    }
+  }
+
+  Future<void> _openPhone(Expert expert) async {
+    final Uri phoneUri = Uri.parse('tel:${expert.phone}');
+    try {
+      if (await canLaunchUrl(phoneUri)) {
+        await launchUrl(phoneUri);
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tidak dapat melakukan panggilan telepon')),
+        );
+      }
+    } catch (e) {
+      debugPrint("Error dialing phone: $e");
+    }
+  }
+
   void _showContactOptions(BuildContext context, Expert expert) {
     showDialog(
       context: context,
@@ -669,7 +744,7 @@ class _NearbyExpertsBottomSheetState extends State<NearbyExpertsBottomSheet> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "Pilih jalur komunikasi untuk berkonsultasi dengan ${expert.name}:",
+                "Pilih jalur komunikasi atau rute untuk berkonsultasi dengan ${expert.name}:",
                 style: const TextStyle(fontSize: 14),
               ),
               const SizedBox(height: 16),
@@ -682,12 +757,7 @@ class _NearbyExpertsBottomSheetState extends State<NearbyExpertsBottomSheet> {
                 subtitle: Text(expert.phone),
                 onTap: () {
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Mengalihkan ke chat WhatsApp ${expert.name}..."),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
+                  _openWhatsApp(expert);
                 },
               ),
               ListTile(
@@ -699,12 +769,19 @@ class _NearbyExpertsBottomSheetState extends State<NearbyExpertsBottomSheet> {
                 subtitle: Text(expert.phone),
                 onTap: () {
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Melakukan panggilan ke ${expert.name}..."),
-                      backgroundColor: Colors.blue,
-                    ),
-                  );
+                  _openPhone(expert);
+                },
+              ),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: const Color(0xFF4ECDC4).withValues(alpha: 0.2),
+                  child: const Icon(Icons.directions, color: Color(0xFF4ECDC4)),
+                ),
+                title: const Text("Rute Google Maps"),
+                subtitle: Text(expert.address, maxLines: 1, overflow: TextOverflow.ellipsis),
+                onTap: () {
+                  Navigator.pop(context);
+                  _openGoogleMaps(expert);
                 },
               ),
             ],
